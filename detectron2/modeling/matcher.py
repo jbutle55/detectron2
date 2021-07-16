@@ -1,6 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 from typing import List
 import torch
+import numpy as np
 
 from detectron2.layers import nonzero_tuple
 
@@ -20,6 +21,8 @@ class Matcher(object):
     ground-truth element m in [0, M) that matches to prediction n in [0, N).
     (b) a vector of length N containing the labels for each prediction.
     """
+
+    # TODO This is where the threshold changes should be made for thesis
 
     def __init__(
         self, thresholds: List[float], labels: List[int], allow_low_quality_matches: bool = False
@@ -86,6 +89,14 @@ class Matcher(object):
             return default_matches, default_match_labels
 
         assert torch.all(match_quality_matrix >= 0)
+
+        # TODO Log all non-zero IoU values for analysis
+
+        # if self.thresholds[1] != self.thresholds[2]:  # Should stop logging for NMS thresholding
+        #     with open('/home/justin/Models/detectron2/mask_paper_train/anchor_IoU.txt', 'a+') as file:
+        #         file.write(',Call,')
+        #         np.savetxt(file, match_quality_matrix.cpu().numpy(), delimiter=',', fmt='%0.3f')
+        #         file.close()
 
         # match_quality_matrix is M (gt) x N (predicted)
         # Max over gt elements (dim 0) to find best gt candidate for each prediction

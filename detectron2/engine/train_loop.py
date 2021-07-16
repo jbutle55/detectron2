@@ -145,6 +145,10 @@ class TrainerBase:
             try:
                 self.before_train()
                 for self.iter in range(start_iter, max_iter):
+                    # TODO Log iteration for easier post processing?
+                    # with open('/home/justin/Models/detectron2/mask_paper_train/anchor_IoU.txt', 'a+') as file:
+                    #     file.write(',Iter{},'.format(self.iter))
+
                     self.before_step()
                     self.run_step()
                     self.after_step()
